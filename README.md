@@ -1,157 +1,121 @@
-# EEG Workshop – Technical Requirements for Participants
+# EEG Workshop
 
-This document describes the required hardware, software, and data setup for the EEG workshop.
-The workshop uses **Brainstorm (UI only)**, **MNE + MNE-BIDS**, **EEGDash**, and **Python notebooks**.
+Welcome to the EEG Workshop repository.
 
----
+This repository accompanies a hands-on EEG workshop using **Brainstorm (UI only)**, **MNE + MNE-BIDS**, **EEGDash**, and **Python notebooks**.
 
-## 1. Hardware Requirements
-
-* Personal laptop (Windows, macOS, or Linux)
-* Minimum **16 GB RAM** (32 GB recommended)
-* Minimum **30 GB free disk space** (SSD strongly recommended)
-* GPU optional (not required)
+Please complete the steps below **before Day 1** to ensure your environment is ready.
 
 ---
 
-## 2. Operating System
+## 1. Read the Technical Requirements
 
-One of the following:
+Before doing anything else, carefully read:
 
-* Windows 10/11 (64-bit)
-* macOS 12 or newer
-* Linux (Ubuntu 20.04+ recommended)
+**TECHNICAL_REQUIREMENTS.md**
 
----
-
-## 3. MATLAB + Brainstorm (UI use only)
-
-Participants must have **Brainstorm available**, using **one** of the following options.
-
-### Option A — MATLAB Installation
-
-* MATLAB **R2022a or newer**
-* Installed toolboxes:
-
-  * Signal Processing Toolbox
-  * Statistics & Machine Learning Toolbox
-* Brainstorm (latest stable version)
-  * [download - brainstorm_260206.zip](https://neuroimage.usc.edu/bst/download.php)
-* Valid MATLAB license (academic license sufficient)
-
-### Option B — MATLAB Runtime (MCR, no license)
-
-* MATLAB Compiler Runtime (MCR) compatible with the Brainstorm version
-* Brainstorm standalone distribution
-  *   [download - brainstorm_260206.zip](https://neuroimage.usc.edu/bst/download.php)
-* No MATLAB coding required (GUI workflows only)
+This document describes the required hardware, operating system, and software setup for the workshop.
 
 ---
 
-## 4. Python Environment (mandatory)
+## 2. Verify Your Python Environment
 
-* **Python 3.9–3.11**
-* Environment manager:
+Run the environment check script to validate your Python installation and dependencies:
 
-  * `conda` or
-  * `venv` - preferable
+```bash
+python env_check_instalation.py
+```
 
-### Required Python packages
+This script checks:
 
-* `mne`
-* `mne-bids`
-* `numpy`
-* `scipy`
-* `pandas`
-* `matplotlib`
-* `pandas`
+* Python version compatibility
+* Required Python packages (MNE, MNE-BIDS, etc.)
+* Optional recommended packages
+* Basic local networking availability
 
-### Strongly recommended
-
-* `autoreject`
-* `pyvista`
-
-
-## 5. In a different ML environment EEGDash (mandatory)
-
-* Prefere instalation on a separate env. 
-* EEGDash installed locally
-  [https://eegdash.org](https://eegdash.org)
-* Used for:
-
-  * EEG dataset ingestion and management
-  * feature extraction
-  * machine-learning workflows
-  * model evaluation and comparison
-* Requirements:
-
-  * Compatible Python environment
-  * Modern web browser (Chrome or Firefox)
-  * Ability to run local services (localhost)
+If the script reports errors, resolve them **before the workshop**.
 
 ---
 
-## 6. Notebook Environment (mandatory)
+## 3. Verify Brainstorm (MATLAB)
 
-One of the following:
+You must be able to launch **Brainstorm**.
 
-* Jupyter Notebook / JupyterLab
-* Marimo - preffered [https://marimo.io/](https://marimo.io/)
+What to check:
 
-Requirements:
+* Start Brainstorm (via MATLAB or standalone)
+* Confirm that the **Brainstorm splash screen / logo appears**
 
-* Must run in the **same Python environment** as MNE, MNE-BIDS, and EEGDash
-* Used for:
-
-  * BIDS inspection and validation
-  * preprocessing demonstrations
-  * feature extraction
-  * ML experiments
+No MATLAB coding is required for the workshop.
+This step only verifies that the Brainstorm **GUI launches correctly**.
 
 ---
 
-## 7. EEG Data Requirements
+## 4. Quick Start
 
-Participants may bring their own EEG data.
+If you want the fastest confirmation that everything works:
 
-Accepted formats:
+1. Activate your Python environment
+2. Open a notebook (Jupyter or Marimo)
+3. Run the following cell:
 
-* **All EEG formats supported by both Brainstorm and MNE**, including (but not limited to):
+```python
+import mne
+import mne_bids
+print("MNE version:", mne.__version__)
+print("MNE-BIDS loaded successfully")
+```
 
-  * EDF / BDF
-  * BrainVision
-  * EEGLAB `.set`
-  * FIF
-  * CNT, EGI, Nicolet, and related formats
+4. Launch Brainstorm and wait for the main window to appear
+5. Start EEGDash and confirm the web interface loads in your browser
 
-Additional requirements:
-
-* Data will be organized or converted to **BIDS** during the workshop
-* Metadata must include:
-
-  * channel names
-  * sampling rate
-  * reference information
-
-Backup datasets will be provided.
+If all steps succeed, your system is ready.
 
 ---
 
-## 8. General Software
+## 5. Day-1 Sanity Checks
 
-* Git
-* ZIP / unzip utility
-* PDF reader
-* Code editor (VS Code recommended)
+On the morning of **Day 1**, please confirm the following.
+
+### Python
+
+* Python environment activates without errors
+* Notebook opens and executes cells
+* `mne` and `mne-bids` import successfully
+
+### Brainstorm
+
+* Brainstorm starts normally
+* Main GUI window appears
+* No license or runtime errors are shown
+
+### EEGDash
+
+* EEGDash service starts
+* Web UI is accessible via browser (localhost)
+* No immediate startup errors
+
+### Data Access
+
+* Workshop datasets are accessible on disk
+* At least one dataset loads in either MNE or Brainstorm
 
 ---
 
-## 9. Network & Permissions
+## 6. You Are Ready When
 
-* Administrator rights to install software
-* Stable internet connection
-* Ability to run local servers and services
+You are ready to attend the workshop if:
+
+* You have read **TECHNICAL_REQUIREMENTS.md**
+* `env_check_instalation.py` runs without errors
+* Brainstorm launches successfully
+* Notebook and EEGDash both run
+
+If any step fails, please fix it in advance or contact the workshop organizers.
 
 ---
 
+We look forward to working with you.
+
+---
 
