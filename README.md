@@ -11,8 +11,7 @@ Please complete the steps below **before Day 1** to ensure your environment is r
 ## 1. Read the Technical Requirements
 
 Before doing anything else, carefully read:
-
-**TECHNICAL_REQUIREMENTS.md**
+`TECHNICAL_REQUIREMENTS.md`
 
 This document describes the required hardware, operating system, and software setup for the workshop.
 
@@ -34,6 +33,8 @@ This script checks:
 * Basic local networking availability
 
 If the script reports errors, resolve them **before the workshop**.
+
+You may opt to follow instalation recommendations in: `PYTHON_ENV_RECOMENDATIONS.md`
 
 ---
 
