@@ -64,6 +64,7 @@ Participants must have **Brainstorm available**, using **one** of the following 
 * `scipy`
 * `pandas`
 * `matplotlib`
+* `pandas`
 
 ### Strongly recommended
 
