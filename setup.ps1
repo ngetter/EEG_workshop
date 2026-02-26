@@ -71,14 +71,24 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 }
 
 # 2. GitHub Desktop
-Write-Step "Checking GitHub Desktop..."
-$ghd = winget list --id GitHub.GitHubDesktop -e 2>$null | Select-String "GitHub Desktop"
-if (-not $ghd) {
-  Write-Warn "GitHub Desktop not found. Installing..."
-  winget install --id GitHub.GitHubDesktop -e --source winget
-  Write-Ok "GitHub Desktop installed."
+Write-Warn "GitHub Desktop check may pause on first winget use while source agreements are processed."
+$setupGithubDesktop = Read-Host "Do you want to check/install GitHub Desktop? [y/N]"
+if (-not [string]::IsNullOrWhiteSpace($setupGithubDesktop) -and $setupGithubDesktop.ToLower().Trim() -eq "y") {
+  Write-Step "Checking GitHub Desktop..."
+  if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    Write-Warn "winget not found. Skipping GitHub Desktop setup."
+  } else {
+    $ghd = winget list --id GitHub.GitHubDesktop -e --accept-source-agreements --disable-interactivity 2>$null | Select-String "GitHub Desktop"
+    if (-not $ghd) {
+      Write-Warn "GitHub Desktop not found. Installing..."
+      winget install --id GitHub.GitHubDesktop -e --source winget --accept-package-agreements --accept-source-agreements --disable-interactivity
+      Write-Ok "GitHub Desktop installed."
+    } else {
+      Write-Ok "GitHub Desktop is installed."
+    }
+  }
 } else {
-  Write-Ok "GitHub Desktop is installed."
+  Write-Step "Skipping GitHub Desktop setup by user choice."
 }
 
 # 3. Choose repo location + clone
