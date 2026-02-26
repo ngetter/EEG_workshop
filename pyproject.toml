@@ -26,6 +26,7 @@ dependencies = [
     "pyvista>=0.43",
 
     # EEGDash and dependencies
+    "eegdash",
     "dash>=2.14",
     "flask>=2.2",
     "plotly>=5.17",
