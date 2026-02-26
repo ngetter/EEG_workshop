@@ -119,5 +119,5 @@ if ($choice -eq "jupyter") {
   uv run jupyter lab
 } else {
   Write-Ok "Launching marimo..."
-  uv run marimo tutorial intro
+  uv run marimo edit sample.py
 }
