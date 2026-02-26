@@ -2,9 +2,9 @@ $ErrorActionPreference = "Stop"
 
 function Write-Header([string]$msg) {
   Write-Host ""
-  Write-Host "╔══════════════════════════════════════════════════════════════╗"
-  Write-Host "║ $msg"
-  Write-Host "╚══════════════════════════════════════════════════════════════╝"
+  Write-Host "==============================================================="
+  Write-Host $msg
+  Write-Host "==============================================================="
 }
 
 function Write-Banner {
