@@ -104,6 +104,7 @@ if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
 
 # 5. Sync environment
 Write-Step "Syncing environment from pyproject.toml..."
+$env:UV_LINK_MODE = "copy"
 uv sync
 uv pip install marimo jupyterlab
 Write-Ok "Environment synced. marimo and jupyterlab ensured."

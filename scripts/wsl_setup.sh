@@ -57,6 +57,7 @@ cd "$repoName"
 ok "Current directory set to $repoName"
 
 step "Syncing environment from pyproject.toml..."
+export UV_LINK_MODE=copy
 uv sync
 uv pip install marimo jupyterlab
 ok "Environment synced. marimo and jupyterlab ensured."
