@@ -28,37 +28,8 @@ function Write-Warn([string]$msg) {
 }
 
 Write-Banner
-Write-Header "EEG Workshop: Windows 11 Environment Setup"
-Write-Warn "Recommendation: Use WSL for a smoother Python/science stack on Windows."
-$useWindows = Read-Host "Continue with native Windows setup? [y/N]"
-if ([string]::IsNullOrWhiteSpace($useWindows) -or $useWindows.ToLower().Trim() -ne "y") {
-  Write-Step "Installing/launching WSL (Ubuntu) and running Linux setup..."
-  wsl --install
-  Write-Step "Checking if WSL is ready..."
-  $wslReady = $true
-  try {
-    wsl -d Ubuntu -- bash -lc "echo WSL_READY" | Out-Null
-  } catch {
-    $wslReady = $false
-  }
-  if (-not $wslReady) {
-    Write-Warn "WSL needs a reboot or first-run setup. Please reboot, then rerun this script."
-    Write-Ok "Exiting Windows setup."
-    exit 0
-  }
-
-  $linuxScriptPath = Join-Path $PSScriptRoot "scripts/wsl_setup.sh"
-  if (-not (Test-Path $linuxScriptPath)) {
-    Write-Warn "Missing Linux setup script: $linuxScriptPath"
-    exit 1
-  }
-  $linuxScript = Get-Content -Raw -Path $linuxScriptPath
-
-  # Run the Linux setup script inside Ubuntu
-  wsl -d Ubuntu -- bash -lc "$linuxScript"
-  Write-Ok "WSL setup complete. Exiting Windows setup."
-  exit 0
-}
+Write-Header "EEG Workshop: Windows 11 Native Setup"
+Write-Warn "This script is Windows-only and does not use WSL."
 
 # 1. Git
 Write-Step "Checking Git..."
@@ -85,9 +56,9 @@ if (-not $ghd) {
 Write-Step "Choose where to save the repo"
 Write-Warn "Avoid paths with Hebrew (or other non-ASCII) characters to prevent tool issues."
 Write-Step "Suggested folder name: EEG_ANALYSIS"
-$baseDir = Read-Host "Enter a full folder path to store the repo (default: C:\\EEG_ANALYSIS)"
+$baseDir = Read-Host "Enter a full folder path to store the repo (default: C:\EEG_ANALYSIS)"
 if ([string]::IsNullOrWhiteSpace($baseDir)) {
-  $baseDir = "C:\\EEG_ANALYSIS"
+  $baseDir = "C:\EEG_ANALYSIS"
 }
 if ($baseDir -match "[^\x00-\x7F]") {
   Write-Warn "The path contains non-ASCII characters. Please use only English letters, numbers, and standard symbols."
