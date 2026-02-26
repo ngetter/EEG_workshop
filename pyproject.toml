@@ -7,7 +7,7 @@ name = "eeg-workshop"
 version = "0.1.0"
 description = "EEG Workshop environment: Brainstorm (UI), MNE, MNE-BIDS, EEGDash, notebooks"
 readme = "README.md"
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.11,<3.12"
 license = "MIT"
 
 dependencies = [
@@ -26,7 +26,7 @@ dependencies = [
     "pyvista>=0.43",
 
     # EEGDash and dependencies
-    "eegdash",
+    "eegdash>=0.5.0",
     "dash>=2.14",
     "flask>=2.2",
     "plotly>=5.17",
