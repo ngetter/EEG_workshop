@@ -38,6 +38,7 @@ def _(DS003775, EEGDash, pathlib):
     # Connect to EEGDash and download/load one dataset recording.
     eegdash = EEGDash()
     eeg_data = pathlib.Path("./eeg_data/")
+    eeg_data.mkdir(parents=True, exist_ok=True)
     dataset = DS003775(cache_dir=eeg_data)
     raw_eeg = dataset.datasets[0].raw
     return raw_eeg

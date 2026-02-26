@@ -39,6 +39,7 @@ def _(DS003775, EEGDash, pathlib):
     # Same data-loading pattern used in exercises/BIDS_DATA/read-bids.py
     _ = EEGDash()
     eeg_data = pathlib.Path("./eeg_data/")
+    eeg_data.mkdir(parents=True, exist_ok=True)
     dataset = DS003775(cache_dir=eeg_data)
     raw_eeg = dataset.datasets[0].raw.copy().load_data()
     return raw_eeg

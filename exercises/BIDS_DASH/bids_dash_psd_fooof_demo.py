@@ -43,6 +43,7 @@ def _(DS003775, EEGDash, pathlib):
     # Download/load DS003775 into local cache.
     _ = EEGDash()
     eeg_data = pathlib.Path("./eeg_data/")
+    eeg_data.mkdir(parents=True, exist_ok=True)
     _ = DS003775(cache_dir=eeg_data)
     bids_root = eeg_data / "ds003775"
     return bids_root
