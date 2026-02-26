@@ -66,15 +66,26 @@ if (-not [string]::IsNullOrWhiteSpace($setupGithubDesktop) -and $setupGithubDesk
 Write-Step "Choose where to save the repo"
 Write-Warn "Avoid paths with Hebrew (or other non-ASCII) characters to prevent tool issues."
 Write-Step "Suggested folder name: EEG_ANALYSIS"
-$baseDir = Read-Host "Enter a full folder path to store the repo (default: C:\EEG_ANALYSIS)"
+$defaultBaseDir = Join-Path $env:USERPROFILE "EEG_ANALYSIS"
+$baseDir = Read-Host "Enter a full folder path to store the repo (default: $defaultBaseDir)"
 if ([string]::IsNullOrWhiteSpace($baseDir)) {
-  $baseDir = "C:\EEG_ANALYSIS"
+  $baseDir = $defaultBaseDir
 }
 if ($baseDir -match "[^\x00-\x7F]") {
   Write-Warn "The path contains non-ASCII characters. Please use only English letters, numbers, and standard symbols."
   exit 1
 }
-if (-not (Test-Path $baseDir)) {
+if (Test-Path $baseDir) {
+  Write-Warn "Folder already exists: $baseDir"
+  $clearBaseDir = Read-Host "Clear all contents before continuing? [y/N]"
+  if (-not [string]::IsNullOrWhiteSpace($clearBaseDir) -and $clearBaseDir.ToLower().Trim() -eq "y") {
+    Write-Step "Clearing folder contents..."
+    Get-ChildItem -Path $baseDir -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Ok "Folder contents cleared."
+  } else {
+    Write-Step "Keeping existing folder contents."
+  }
+} else {
   Write-Step "Creating folder: $baseDir"
   New-Item -ItemType Directory -Path $baseDir | Out-Null
 }
