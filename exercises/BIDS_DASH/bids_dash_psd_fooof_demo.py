@@ -17,24 +17,23 @@ def _():
     from fooof import FOOOF
     from eegdash import EEGDash
     from eegdash.dataset import DS003775
-    return DS003775, EEGDash, FOOOF, mo, mne, mne_bids, np, pathlib, plt, re
+
+    return DS003775, EEGDash, mne, mne_bids, mo, pathlib, re
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        r"""
-# BIDS + EEGDash Demo: PSD and FOOOF
+    mo.md(r"""
+    # BIDS + EEGDash Demo: PSD and FOOOF
 
-This demo:
-1. Lists all subjects in the dataset.
-2. Lists all tasks in the dataset.
-3. Lists all sessions in the dataset.
-4. Loads one eyes-closed file and one eyes-open file by **task** or **session**.
-5. Computes PSD for both files.
-6. Runs FOOOF for both PSDs and displays summary info.
-"""
-    )
+    This demo:
+    1. Lists all subjects in the dataset.
+    2. Lists all tasks in the dataset.
+    3. Lists all sessions in the dataset.
+    4. Loads one eyes-closed file and one eyes-open file by **task** or **session**.
+    5. Computes PSD for both files.
+    6. Runs FOOOF for both PSDs and displays summary info.
+    """)
     return
 
 
@@ -44,9 +43,11 @@ def _(DS003775, EEGDash, pathlib):
     _ = EEGDash()
     eeg_data = pathlib.Path("./eeg_data/")
     eeg_data.mkdir(parents=True, exist_ok=True)
-    _ = DS003775(cache_dir=eeg_data)
+    dash_data = DS003775(cache_dir=eeg_data)
     bids_root = eeg_data / "ds003775"
-    return bids_root
+    raw = dash_data.datasets[0].raw
+    raw.info
+    return (bids_root,)
 
 
 @app.cell
@@ -64,11 +65,11 @@ def _(mo, sessions, subjects, tasks):
     ses_txt = ", ".join(sessions) if sessions else "None found"
     mo.md(
         f"""
-## Dataset inventory
-- Subjects: {s_txt}
-- Tasks: {t_txt}
-- Sessions: {ses_txt}
-"""
+    ## Dataset inventory
+    - Subjects: {s_txt}
+    - Tasks: {t_txt}
+    - Sessions: {ses_txt}
+    """
     )
     return
 
@@ -86,7 +87,7 @@ def _(bids_root, re):
         rec = match.groupdict()
         rec["path"] = str(fpath)
         records.append(rec)
-    return records
+    return (records,)
 
 
 @app.cell
@@ -102,12 +103,7 @@ def _():
 
 
 @app.cell
-def _(
-    eyes_closed_selector,
-    eyes_open_selector,
-    records,
-    selection_mode,
-):
+def _(eyes_closed_selector, eyes_open_selector, records, selection_mode):
     def _is_eyes_closed(task_name):
         t = task_name.lower()
         return ("eyesc" in t) or ("closed" in t)
@@ -140,7 +136,7 @@ def _(mne, rec_closed, rec_open):
     else:
         raw_closed = mne.io.read_raw(rec_closed["path"], preload=True, verbose=False)
         raw_open = mne.io.read_raw(rec_open["path"], preload=True, verbose=False)
-    return raw_closed, raw_open
+    return
 
 
 @app.cell
@@ -152,16 +148,16 @@ def _(mo, rec_closed, rec_open):
     else:
         mo.md(
             f"""
-## Selected files
-- Eyes closed: `{rec_closed["path"]}`
-- Eyes open: `{rec_open["path"]}`
-"""
+    ## Selected files
+    - Eyes closed: `{rec_closed["path"]}`
+    - Eyes open: `{rec_open["path"]}`
+    """
         )
     return
 
 
-@app.cell
-def _(np, raw_closed, raw_open):
+app._unparsable_cell(
+    r"""
     if raw_closed is None or raw_open is None:
         return None, None, None, None
 
@@ -172,12 +168,13 @@ def _(np, raw_closed, raw_open):
     psd_open = raw_open.copy().crop(tmin=1, tmax=30).compute_psd(fmin=1, fmax=45)
     p_open, _ = psd_open.get_data(return_freqs=True)
     p_open_mean = np.mean(p_open, axis=0)
+    """,
+    name="_"
+)
 
-    return freqs, p_closed_mean, p_open_mean, psd_closed
 
-
-@app.cell
-def _(mo, np, plt, freqs, p_closed_mean, p_open_mean):
+app._unparsable_cell(
+    r"""
     if freqs is None:
         mo.md("PSD not computed yet.")
         return
@@ -191,11 +188,13 @@ def _(mo, np, plt, freqs, p_closed_mean, p_open_mean):
     ax.grid(True, alpha=0.3)
     ax.legend()
     mo.as_html(fig)
-    return
+    """,
+    name="_"
+)
 
 
-@app.cell
-def _(FOOOF, freqs, p_closed_mean, p_open_mean):
+app._unparsable_cell(
+    r"""
     if freqs is None:
         return None, None
 
@@ -203,11 +202,13 @@ def _(FOOOF, freqs, p_closed_mean, p_open_mean):
     fm_open = FOOOF(peak_width_limits=[1, 12], max_n_peaks=6, verbose=False)
     fm_closed.fit(freqs, p_closed_mean, [1, 45])
     fm_open.fit(freqs, p_open_mean, [1, 45])
-    return fm_closed, fm_open
+    """,
+    name="_"
+)
 
 
-@app.cell
-def _(fm_closed, fm_open, mo, pd):
+app._unparsable_cell(
+    r"""
     if fm_closed is None or fm_open is None:
         mo.md("FOOOF not computed yet.")
         return
@@ -233,7 +234,9 @@ def _(fm_closed, fm_open, mo, pd):
         ]
     )
     mo.vstack([mo.md("## FOOOF summary"), summary])
-    return
+    """,
+    name="_"
+)
 
 
 if __name__ == "__main__":
