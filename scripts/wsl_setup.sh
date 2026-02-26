@@ -71,5 +71,5 @@ if [ "$choice" = "jupyter" ]; then
   uv run jupyter lab
 else
   ok "Launching marimo..."
-  uv run marimo tutorial
+  uv run marimo tutorial intro
 fi
